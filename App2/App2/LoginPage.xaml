@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App2.LoginPage"
+             Padding="20, 20, 20, 60">
+    
+    <ContentPage.Content>
+
+        <StackLayout Orientation = "Vertical" HorizontalOptions="Center" VerticalOptions="Center">
+
+            <Label Text="Login Page" Font="bold, Large" BackgroundColor="DarkBlue" TextColor="White" HorizontalTextAlignment="Center"/>
+
+            <Label Text="Username"/>
+            <Entry x:Name="txtUserName" 
+                   Placeholder="Please enter your name" 
+                   BackgroundColor="Gray"/>
+            
+            <Label Text="Password"/>
+            <Entry x:Name="txtPassword"
+                   Placeholder="Please enter your password"
+                   BackgroundColor="Gray"
+                   IsPassword="True"
+                   TextChanged="txtPasswordChanged"/>
+
+            <Button Text="Login"/>
+
+        </StackLayout>
+        
+    </ContentPage.Content>
+</ContentPage>

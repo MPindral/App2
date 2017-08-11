@@ -13,8 +13,18 @@ namespace App2
 		{
 			InitializeComponent();
 
-			MainPage = new App2.MainPage();
-		}
+
+            //I ran out of time and I was unable to wire the activities together with buttons
+            //So to test the various separate screens I would comment out the relevant lines
+            //to run the particular activity.
+
+            //MainPage = new App2.MainPage
+            //MainPage = new App2.StartPage();
+            //MainPage = new App2.LoginPage();
+            //MainPage = new App2.HighScoresPage();
+            //MainPage = new App2.ChooseQuiz();
+            MainPage = new App2.RecordQuizAnswers();
+        }
 
 		protected override void OnStart ()
 		{
