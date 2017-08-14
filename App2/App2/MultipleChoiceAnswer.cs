@@ -7,7 +7,7 @@ namespace App2
 
 
     //Reference from http://proquestcombo.safaribooksonline.com.ezproxy-b.deakin.edu.au/video/programming/mobile/9781771373371#
-    class MultipleChoiceAnswer
+    public class MultipleChoiceAnswer
     {
 
         public MultipleChoiceAnswer(string Description, bool isChecked)

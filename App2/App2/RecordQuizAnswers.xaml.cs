@@ -47,7 +47,10 @@ namespace App2
             {
                 Intent = TableIntent.Data,
                 Root = new TableRoot("Questions"),
-                RowHeight = 80                
+                MinimumHeightRequest = 100,
+                // I have to put this line below so that Xamarin can render rows of different heights.
+                //Taken from https://forums.xamarin.com/discussion/17471/can-you-have-dynamic-cell-heights-with-either-the-listview-or-tableview-views
+                HasUnevenRows = true             
             };
 
             section = new TableSection();
@@ -283,8 +286,7 @@ namespace App2
 
                     }
 
-                    //THis is not working as it is not showing up the item values.
-                    //I dont think I am even populating the List of possible answers on line 293 below.
+
                     if(item.type == "multiplechoice")
                     {
 
@@ -294,7 +296,7 @@ namespace App2
 
                         foreach(var optionItem in item.options)
                         {
-                            new MultipleChoiceAnswer(optionItem, false);
+                            multipleChoiceAnswers.Add(new MultipleChoiceAnswer(optionItem, false));   
                         }
 
                         ListView listView = new ListView
@@ -317,7 +319,7 @@ namespace App2
                                     Height = 100,
                                     View = new StackLayout
                                     {
-                                        Orientation = StackOrientation.Vertical,
+                                        Orientation = StackOrientation.Horizontal,
                                         HorizontalOptions = LayoutOptions.StartAndExpand,
                                         Children = {
                                 new StackLayout {
