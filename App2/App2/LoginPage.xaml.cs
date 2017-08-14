@@ -22,6 +22,6 @@ namespace App2
         {
             Entry txtPassword = sender as Entry;
             string password = txtPassword.Text;
-        }
-	}
+        } 
+	}//
 }
