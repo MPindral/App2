@@ -30,6 +30,8 @@ namespace App2
         List<string> OptionItems;
         List<string> OptionItemsImage;
 
+        List<MultipleChoiceAnswer> multipleChoiceAnswers;
+
         public RecordQuizAnswers ()
 		{
 			InitializeComponent ();
@@ -292,7 +294,7 @@ namespace App2
 
                         //This approach was referenced from http://proquestcombo.safaribooksonline.com.ezproxy-b.deakin.edu.au/video/programming/mobile/9781771373371#
 
-                        List<MultipleChoiceAnswer> multipleChoiceAnswers = new List<MultipleChoiceAnswer>();
+                        multipleChoiceAnswers = new List<MultipleChoiceAnswer>();
 
                         foreach(var optionItem in item.options)
                         {
@@ -313,6 +315,34 @@ namespace App2
 
                                 Xamarin.Forms.Switch swIsChecked = new Xamarin.Forms.Switch();
                                 swIsChecked.SetBinding(Xamarin.Forms.Switch.IsToggledProperty, "IsChecked");
+
+                                //This is to update the list of switches and the corresponding label.
+                                //It is a bit of a hack but it seems to be working OK.
+                                swIsChecked.Toggled += (sender, e) => // I got this line from https://stackoverflow.com/questions/32975894/xamarin-forms-switch-sends-toggled-event-when-value-is-updated
+                                {
+                                    if (e != null)
+                                    {
+                                        var optionText = lblDescription.Text;
+
+                                        foreach(var multianswer in multipleChoiceAnswers)
+                                        {
+                                            if (multianswer.Description == optionText)
+                                            {
+                                                if (multianswer.isChecked == true)
+                                                {
+                                                    multianswer.isChecked = false;
+                                                }
+                                                else
+                                                {
+                                                    multianswer.isChecked = true;
+                                                }
+                                                lblIsChecked.Text = multianswer.IsCheckedString;
+                                            }
+                                        }
+
+                                    }
+                                    
+                                };
 
                                 return new ViewCell
                                 {

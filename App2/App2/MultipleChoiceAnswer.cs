@@ -16,11 +16,11 @@ namespace App2
             this.isChecked = isChecked;
         }
 
-        public string Description { private set; get; }
+        public string Description { set; get; }
 
-        public bool isChecked { private set; get; }
+        public bool isChecked { set; get; }
 
-        public string IsCheckedString { get { return isChecked ? "Yes" : "No"; } }
+        public string IsCheckedString { get { return isChecked ? "Selected" : "Not Selected"; } }
 
 
     }
