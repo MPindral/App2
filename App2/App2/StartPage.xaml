@@ -9,16 +9,14 @@
         <StackLayout Orientation = "Vertical" HorizontalOptions="Center" VerticalOptions="Start">
 
             <Label Text="Quiz Show"
-                   Font="bold, Large" 
+                   Font="bold,Large" 
                    BackgroundColor="DarkBlue" 
                    TextColor="White" 
                    HorizontalTextAlignment="Center"/>
+
+            <Button x:Name="btnStartQuiz" Text="Start New Quiz" Clicked="btnStartQuizClicked"></Button>
             
-            <Button Text="Start New Quiz"/>
-
-            <Button Text="Login / Change User"/>
-
-            <Button Text="View High Scores"/>
+            
 
         </StackLayout>
         

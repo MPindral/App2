@@ -16,5 +16,22 @@ namespace App2
 		{
 			InitializeComponent ();
 		}
-	}
+
+        void btnStartQuizClicked(object sender, EventArgs e)
+        {
+            new NavigationPage(new ChooseQuiz());
+        }
+
+        //void btnLoginChangeClicked(object sender, EventArgs e)
+        //{
+        //    new NavigationPage(new ChooseQuiz());
+        //}
+
+        //void btnViewHighScoresClicked(object sender, EventArgs e)
+        //{
+        //    new NavigationPage(new ChooseQuiz());
+        //}
+
+
+    }
 }
