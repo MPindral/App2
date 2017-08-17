@@ -17,9 +17,9 @@ namespace App2
 			InitializeComponent ();
 		}
 
-        void btnStartQuizClicked(object sender, EventArgs e)
+        private async void btnStartQuizClicked(object sender, EventArgs e)
         {
-            new NavigationPage(new ChooseQuiz());
+            await Navigation.PushAsync(new ChooseQuiz());
         }
 
         //void btnLoginChangeClicked(object sender, EventArgs e)

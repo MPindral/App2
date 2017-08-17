@@ -18,7 +18,7 @@ namespace App2
             //So to test the various separate screens I would comment out the relevant lines
             //to run the particular activity.
 
-            MainPage = new App2.StartPage();
+            MainPage = new NavigationPage(new StartPage());
             //MainPage = new App2.LoginPage();
             //MainPage = new App2.HighScoresPage();
             //MainPage = new App2.ChooseQuiz();
