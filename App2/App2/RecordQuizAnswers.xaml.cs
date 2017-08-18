@@ -69,26 +69,31 @@ namespace App2
 
             foreach (var question in result)
             {
-                foreach (var item in question.questions)
+
+                Console.WriteLine(ChooseQuiz.quizIdClicked);
+
+                if (question.id == ChooseQuiz.quizIdClicked)
                 {
-
-                    Label questionId = new Label();
-                    questionId.Text = ("Question: " + item.id +" - "+ item.text).ToString();
-                    questionId.FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label));
-                    questionId.FontAttributes = FontAttributes.Bold;
-
-                    Label help = new Label();
-                    help.Text = ("Hint: "+item.help);
-
-                    ViewCellHeader = new ViewCell()
+                    foreach (var item in question.questions)
                     {
-                        
-                        View = new StackLayout
+
+                        Label questionId = new Label();
+                        questionId.Text = ("Question: " + item.id + " - " + item.text).ToString();
+                        questionId.FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label));
+                        questionId.FontAttributes = FontAttributes.Bold;
+
+                        Label help = new Label();
+                        help.Text = ("Hint: " + item.help);
+
+                        ViewCellHeader = new ViewCell()
                         {
-                            Margin = new Thickness(0,10,0,0),
-                            Orientation = StackOrientation.Vertical,
-                            VerticalOptions = LayoutOptions.Center,
-                            Children =
+
+                            View = new StackLayout
+                            {
+                                Margin = new Thickness(0, 10, 0, 0),
+                                Orientation = StackOrientation.Vertical,
+                                VerticalOptions = LayoutOptions.Center,
+                                Children =
                                 {
                                     new StackLayout
                                     {
@@ -100,248 +105,248 @@ namespace App2
                                         }
                                     }
                                 }
-                        }
-                    };
+                            }
+                        };
 
 
-                    if (item.type == "date" || item.type == "Date" || item.type == "textbox")
-                    {
-                        //For single Line entries
-                        Entry singleLineEntry = new Entry();
-
-                        ViewCell ViewCellAnswer = new ViewCell()
+                        if (item.type == "date" || item.type == "Date" || item.type == "textbox")
                         {
-                            View = new StackLayout
+                            //For single Line entries
+                            Entry singleLineEntry = new Entry();
+
+                            ViewCell ViewCellAnswer = new ViewCell()
                             {
-                                Orientation = StackOrientation.Vertical,
-                                VerticalOptions = LayoutOptions.Center,
-                                Children =
+                                View = new StackLayout
+                                {
+                                    Orientation = StackOrientation.Vertical,
+                                    VerticalOptions = LayoutOptions.Center,
+                                    Children =
                                     {
                                         singleLineEntry
                                     }
-                            }
-                        };
+                                }
+                            };
 
-                        section.Add(ViewCellHeader);
-                        section.Add(ViewCellAnswer);
+                            section.Add(ViewCellHeader);
+                            section.Add(ViewCellAnswer);
 
-                    }
- 
+                        }
 
-                    if (item.type == "textarea")
-                    {
-                        //For single Line entries
-                        Editor multlineEditor = new Editor { HeightRequest = 50 };
 
-                        ViewCell ViewCellAnswer = new ViewCell()
+                        if (item.type == "textarea")
                         {
-                            View = new StackLayout
+                            //For single Line entries
+                            Editor multlineEditor = new Editor { HeightRequest = 50 };
+
+                            ViewCell ViewCellAnswer = new ViewCell()
                             {
-                                Orientation = StackOrientation.Vertical,
-                                Children =
+                                View = new StackLayout
+                                {
+                                    Orientation = StackOrientation.Vertical,
+                                    Children =
                                     {
                                         multlineEditor
                                     }
-                            }
-                        };
-                        section.Add(ViewCellHeader);
-                        section.Add(ViewCellAnswer);
-                    }
-
-                    if (item.type == "choice" || item.type == "options")
-                    {
-                        Picker pickerView = new Picker
-                        {
-                            Title = "Pick one",
-                            BackgroundColor = Xamarin.Forms.Color.LightGray,
-                            VerticalOptions = LayoutOptions.Center
-                        };
-
-                        foreach (var pickerItem in item.options)
-                        {
-                            pickerView.Items.Add(pickerItem);
+                                }
+                            };
+                            section.Add(ViewCellHeader);
+                            section.Add(ViewCellAnswer);
                         }
 
-                        ViewCell ViewCellAnswer = new ViewCell()
+                        if (item.type == "choice" || item.type == "options")
                         {
-                            View = new StackLayout
+                            Picker pickerView = new Picker
                             {
-                                Orientation = StackOrientation.Vertical,
-                                Children =
+                                Title = "Pick one",
+                                BackgroundColor = Xamarin.Forms.Color.LightGray,
+                                VerticalOptions = LayoutOptions.Center
+                            };
+
+                            foreach (var pickerItem in item.options)
+                            {
+                                pickerView.Items.Add(pickerItem);
+                            }
+
+                            ViewCell ViewCellAnswer = new ViewCell()
+                            {
+                                View = new StackLayout
+                                {
+                                    Orientation = StackOrientation.Vertical,
+                                    Children =
                                     {
                                         pickerView
                                     }
-                            }
-                        };
+                                }
+                            };
 
-                        section.Add(ViewCellHeader);
-                        section.Add(ViewCellAnswer);
-                    }
-
-                    if (item.type == "slidingoption")
-                    {
-                        sliderView = new Slider
-                        {
-                            Minimum = 0.0f,
-                            Maximum = 2.0f,
-                            Value = 1.0f,
-                            VerticalOptions = LayoutOptions.Center
-                        };
-
-                        OptionItems = new List<string>();
-                        OptionItemsImage = new List<string>();
-
-                        foreach (var optionItem in item.options)
-                        {
-                            OptionItems.Add(optionItem);
+                            section.Add(ViewCellHeader);
+                            section.Add(ViewCellAnswer);
                         }
 
-                        foreach (var optionItem in item.optionVisuals)
+                        if (item.type == "slidingoption")
                         {
-                            OptionItemsImage.Add(optionItem);
-                        }
-
-                        sliderPositionText = new Label
-                        {
-                            Text = OptionItems[Convert.ToInt32(sliderView.Value)]
-                        };
-
-                        sliderPositionImage = new Label
-                        {
-                            Text = OptionItemsImage[Convert.ToInt32(sliderView.Value)]
-                        };
-
-                        sliderView.ValueChanged += sliderValueChanged;
-
-                        ViewCell ViewCellAnswer = new ViewCell()
-                        {
-                            View = new StackLayout
+                            sliderView = new Slider
                             {
-                                Orientation = StackOrientation.Vertical,
-                                Children =
+                                Minimum = 0.0f,
+                                Maximum = 2.0f,
+                                Value = 1.0f,
+                                VerticalOptions = LayoutOptions.Center
+                            };
+
+                            OptionItems = new List<string>();
+                            OptionItemsImage = new List<string>();
+
+                            foreach (var optionItem in item.options)
+                            {
+                                OptionItems.Add(optionItem);
+                            }
+
+                            foreach (var optionItem in item.optionVisuals)
+                            {
+                                OptionItemsImage.Add(optionItem);
+                            }
+
+                            sliderPositionText = new Label
+                            {
+                                Text = OptionItems[Convert.ToInt32(sliderView.Value)]
+                            };
+
+                            sliderPositionImage = new Label
+                            {
+                                Text = OptionItemsImage[Convert.ToInt32(sliderView.Value)]
+                            };
+
+                            sliderView.ValueChanged += sliderValueChanged;
+
+                            ViewCell ViewCellAnswer = new ViewCell()
+                            {
+                                View = new StackLayout
+                                {
+                                    Orientation = StackOrientation.Vertical,
+                                    Children =
                                     {
                                         sliderView,
                                         sliderPositionText,
                                         sliderPositionImage
                                     }
-                            }
-                        };
+                                }
+                            };
 
-                        section.Add(ViewCellHeader);
-                        section.Add(ViewCellAnswer);
-                    }
+                            section.Add(ViewCellHeader);
+                            section.Add(ViewCellAnswer);
+                        }
 
-                    if (item.type == "scale")
-                    {
-                        
-                        Stepper stepperView = new Stepper
+                        if (item.type == "scale")
                         {
-                            Minimum = Convert.ToDouble(item.start),
-                            Maximum = Convert.ToDouble(item.end),
-                            Value = Convert.ToDouble(item.end*0.5f),
-                            VerticalOptions = LayoutOptions.Center,
-                            Increment = Convert.ToDouble(item.increment)
 
-                            //Here I was also wanting to utilise the colouring of the slider
-                            //but I could not seem to bring up the MinimumTrackTintColor and
-                            //MaximumTrackTintColor methods. If I could have done this then I
-                            //would have applied the gradients.
+                            Stepper stepperView = new Stepper
+                            {
+                                Minimum = Convert.ToDouble(item.start),
+                                Maximum = Convert.ToDouble(item.end),
+                                Value = Convert.ToDouble(item.end * 0.5f),
+                                VerticalOptions = LayoutOptions.Center,
+                                Increment = Convert.ToDouble(item.increment)
 
-                        };
-                        
-                        Label stepperValue = new Label
+                                //Here I was also wanting to utilise the colouring of the slider
+                                //but I could not seem to bring up the MinimumTrackTintColor and
+                                //MaximumTrackTintColor methods. If I could have done this then I
+                                //would have applied the gradients.
+
+                            };
+
+                            Label stepperValue = new Label
                             {
                                 Text = stepperView.Value.ToString()
                             };
 
-                        StepperChange myStepperChange = new StepperChange();
+                            StepperChange myStepperChange = new StepperChange();
 
-                        myStepperChange.setLabel(stepperValue);
+                            myStepperChange.setLabel(stepperValue);
 
-                        stepperView.ValueChanged += myStepperChange.OnStepperValueChanged;
+                            stepperView.ValueChanged += myStepperChange.OnStepperValueChanged;
 
-                        ViewCell ViewCellAnswer = new ViewCell()
-                        {
-                            View = new StackLayout
+                            ViewCell ViewCellAnswer = new ViewCell()
                             {
-                                Orientation = StackOrientation.Vertical,
-                                Children =
+                                View = new StackLayout
+                                {
+                                    Orientation = StackOrientation.Vertical,
+                                    Children =
                                     {
                                         stepperView,
                                         stepperValue
                                     }
-                            }
-                        };
+                                }
+                            };
 
-                        section.Add(ViewCellHeader);
-                        section.Add(ViewCellAnswer);
+                            section.Add(ViewCellHeader);
+                            section.Add(ViewCellAnswer);
 
-                    }
-
-
-                    if(item.type == "multiplechoice")
-                    {
-
-                        //This approach was referenced from http://proquestcombo.safaribooksonline.com.ezproxy-b.deakin.edu.au/video/programming/mobile/9781771373371#
-
-                        multipleChoiceAnswers = new List<MultipleChoiceAnswer>();
-
-                        foreach(var optionItem in item.options)
-                        {
-                            multipleChoiceAnswers.Add(new MultipleChoiceAnswer(optionItem, false));   
                         }
 
-                        ListView listView = new ListView
+
+                        if (item.type == "multiplechoice")
                         {
-                            ItemsSource = multipleChoiceAnswers,
 
-                            ItemTemplate = new DataTemplate(() => {
+                            //This approach was referenced from http://proquestcombo.safaribooksonline.com.ezproxy-b.deakin.edu.au/video/programming/mobile/9781771373371#
 
-                                Label lblDescription = new Label();
-                                lblDescription.SetBinding(Label.TextProperty, "Description");
+                            multipleChoiceAnswers = new List<MultipleChoiceAnswer>();
 
-                                Label lblIsChecked = new Label();
-                                lblIsChecked.SetBinding(Label.TextProperty, "IsCheckedString");
+                            foreach (var optionItem in item.options)
+                            {
+                                multipleChoiceAnswers.Add(new MultipleChoiceAnswer(optionItem, false));
+                            }
 
-                                Xamarin.Forms.Switch swIsChecked = new Xamarin.Forms.Switch();
-                                swIsChecked.SetBinding(Xamarin.Forms.Switch.IsToggledProperty, "IsChecked");
+                            ListView listView = new ListView
+                            {
+                                ItemsSource = multipleChoiceAnswers,
 
-                                //This is to update the list of switches and the corresponding label.
-                                //It is a bit of a hack but it seems to be working OK.
-                                swIsChecked.Toggled += (sender, e) => // I got this line from https://stackoverflow.com/questions/32975894/xamarin-forms-switch-sends-toggled-event-when-value-is-updated
-                                {
-                                    if (e != null)
+                                ItemTemplate = new DataTemplate(() => {
+
+                                    Label lblDescription = new Label();
+                                    lblDescription.SetBinding(Label.TextProperty, "Description");
+
+                                    Label lblIsChecked = new Label();
+                                    lblIsChecked.SetBinding(Label.TextProperty, "IsCheckedString");
+
+                                    Xamarin.Forms.Switch swIsChecked = new Xamarin.Forms.Switch();
+                                    swIsChecked.SetBinding(Xamarin.Forms.Switch.IsToggledProperty, "IsChecked");
+
+                                    //This is to update the list of switches and the corresponding label.
+                                    //It is a bit of a hack but it seems to be working OK.
+                                    swIsChecked.Toggled += (sender, e) => // I got this line from https://stackoverflow.com/questions/32975894/xamarin-forms-switch-sends-toggled-event-when-value-is-updated
                                     {
-                                        var optionText = lblDescription.Text;
-
-                                        foreach(var multianswer in multipleChoiceAnswers)
+                                        if (e != null)
                                         {
-                                            if (multianswer.Description == optionText)
+                                            var optionText = lblDescription.Text;
+
+                                            foreach (var multianswer in multipleChoiceAnswers)
                                             {
-                                                if (multianswer.isChecked == true)
+                                                if (multianswer.Description == optionText)
                                                 {
-                                                    multianswer.isChecked = false;
+                                                    if (multianswer.isChecked == true)
+                                                    {
+                                                        multianswer.isChecked = false;
+                                                    }
+                                                    else
+                                                    {
+                                                        multianswer.isChecked = true;
+                                                    }
+                                                    lblIsChecked.Text = multianswer.IsCheckedString;
                                                 }
-                                                else
-                                                {
-                                                    multianswer.isChecked = true;
-                                                }
-                                                lblIsChecked.Text = multianswer.IsCheckedString;
                                             }
+
                                         }
 
-                                    }
-                                    
-                                };
+                                    };
 
-                                return new ViewCell
-                                {
-                                    Height = 100,
-                                    View = new StackLayout
+                                    return new ViewCell
                                     {
-                                        Orientation = StackOrientation.Horizontal,
-                                        HorizontalOptions = LayoutOptions.StartAndExpand,
-                                        Children = {
+                                        Height = 100,
+                                        View = new StackLayout
+                                        {
+                                            Orientation = StackOrientation.Horizontal,
+                                            HorizontalOptions = LayoutOptions.StartAndExpand,
+                                            Children = {
                                 new StackLayout {
                                     VerticalOptions = LayoutOptions.Center,
                                     Spacing = 0,
@@ -358,34 +363,38 @@ namespace App2
                                     }
                                 }
                             }
-                                    }
-                                };
-                            }
-                            
+                                        }
+                                    };
+                                }
 
-                            )
-                        };
 
-                        
-                        ViewCell ViewCellAnswer = new ViewCell()
-                        {
-                            View = new StackLayout
+                                )
+                            };
+
+
+                            ViewCell ViewCellAnswer = new ViewCell()
                             {
-                                Orientation = StackOrientation.Vertical,
-                                Children =
+                                View = new StackLayout
+                                {
+                                    Orientation = StackOrientation.Vertical,
+                                    Children =
                                     {
                                         listView
                                     }
-                            }
-                        };
+                                }
+                            };
 
-                        section.Add(ViewCellHeader);
-                        section.Add(ViewCellAnswer);
+                            section.Add(ViewCellHeader);
+                            section.Add(ViewCellAnswer);
+
+                        }
+
 
                     }
 
-
                 }
+
+
             }
             tblQuizes.Root.Add(section);
             //tblQuizes.Root.Add(new TableSection[] { section });

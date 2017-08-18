@@ -17,7 +17,7 @@ namespace App2
         private TableView tblQuizes;
         ViewCell ViewCellHeader;
 
-        string quizIdClicked;
+        public static string quizIdClicked;
 
         public ChooseQuiz()
         {
