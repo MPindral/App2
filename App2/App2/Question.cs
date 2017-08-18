@@ -8,6 +8,8 @@ namespace App2
     {
 
         //I needed this assistance in creating the JSON object from here http://json2csharp.com/
+        //I was personally very confused about how to cerate an object with nested elements
+        //I had only really dealt with parsing XML and only once had I parsed JSON
 
         public Question()
         {

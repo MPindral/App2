@@ -22,15 +22,15 @@ namespace App2
             await Navigation.PushAsync(new ChooseQuiz());
         }
 
-        //void btnLoginChangeClicked(object sender, EventArgs e)
-        //{
-        //    new NavigationPage(new ChooseQuiz());
-        //}
+        private async void btnLoginChangeClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new LoginPage());
+        }
 
-        //void btnViewHighScoresClicked(object sender, EventArgs e)
-        //{
-        //    new NavigationPage(new ChooseQuiz());
-        //}
+        private async void btnViewHighScoresClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new HighScoresPage());
+        }
 
 
     }

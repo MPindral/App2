@@ -10,41 +10,32 @@ using System.Diagnostics;
 
 namespace App2
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class ChooseQuiz : ContentPage
-	{
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class ChooseQuiz : ContentPage
+    {
 
         private TableView tblQuizes;
+        ViewCell ViewCellHeader;
 
-        public ChooseQuiz ()
-		{
-			InitializeComponent ();
+        string quizIdClicked;
 
-            Label header = new Label
-            {
-                Text = "Choose Quiz",
-                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)), //I utilised this URL for this line https://forums.xamarin.com/discussion/30207/whats-the-deal-with-xamarin-forms-label-font-is-obsolete
-                HorizontalTextAlignment = TextAlignment.Center,
-                BackgroundColor = Color.DarkBlue,
-                TextColor = Color.White
-            };
+        public ChooseQuiz()
+        {
+            InitializeComponent();
 
             tblQuizes = new TableView
             {
                 Intent = TableIntent.Data,
-                Root = new TableRoot("Questions")
+                Root = new TableRoot()
             };
 
             this.Content = new StackLayout
             {
                 Children = {
-                    header,
                     tblQuizes
                 }
             };
-
-            Debug.WriteLine("Before ReadQuiz:");
-
+            
             //Go and get the json data
             ReadQuiz();
 
@@ -55,37 +46,75 @@ namespace App2
 
             string jsonString = returnJsonString();
 
-            List<RootObject> result = (List<RootObject>)JsonConvert.DeserializeObject(jsonString,typeof (List<RootObject>));
+            List<RootObject> result = (List<RootObject>)JsonConvert.DeserializeObject(jsonString, typeof(List<RootObject>));
 
-            TableSection section = new TableSection("Questions");
+            TableSection section = new TableSection();
 
             foreach (RootObject ro in result)
             {
-                section.Add(new TextCell
+                Label id = new Label();
+                id.Text = (ro.id).ToString();
+                id.FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label));
+                id.FontAttributes = FontAttributes.Bold;
+
+                Label description = new Label();
+                description.Text = ro.title;
+                description.FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label));
+
+                ViewCellHeader = new ViewCell()
                 {
-                    Text = (ro.id).ToString(),
-                    TextColor = Color.Black,
-                    Detail = ro.title,
-                    DetailColor = Color.Navy
-                }
-                
-                );
-                
+                    View = new StackLayout
+                    {
+                        Margin = new Thickness(0, 10, 0, 0),
+                        Orientation = StackOrientation.Vertical,
+                        VerticalOptions = LayoutOptions.Center,
+                        Children =
+                                {
+                                    new StackLayout
+                                    {
+                                        Orientation = StackOrientation.Horizontal,
+                                        Children =
+                                        {
+                                            id,
+                                            description
+                                        }
+                                    }
+                                }
+                    }
+                };
+
+                ViewCellHeader.Tapped += (sender, e) =>
+                {
+                    //record which row item was clicked.
+                    //I beleieve that there should be a method of passing data to a new page
+                    //Like you can in iOS and Android but I was unable to find the Xamarin equivalent.
+                    quizIdClicked = id.Text;
+                    //Open the record quiz page
+                    openRecordQuizAnswers();
+                };
+
+                //Add the viewcell to the section
+                section.Add(ViewCellHeader);
             }
 
-
+            //Add the section to the tableview
             tblQuizes.Root.Add(new TableSection[] { section });
+
         }
 
+        private async void openRecordQuizAnswers()
+        {
+            await Navigation.PushAsync(new RecordQuizAnswers());
+        }
 
         public string returnJsonString()
         {
             string jsonString;
-            
+
             /**
              * If you want to enter a new json string, then you paste it below.
              * You will need to have double quotation marks for the string to read properly.
-             * Simply highlight your new string and do find and replace all single quotations with a double.
+             * Simply highlight your new string and do find and replace all single quotations with a double quotation.
              **/
 
             jsonString = @"
@@ -124,7 +153,7 @@ namespace App2
                 ""text"": ""Mood"",
                 ""type"": ""slidingoption"",
                 ""options"": [ ""Sad"", ""Happy"", ""Laughing"" ],
-                ""optionVisuals"": [ ""😭"", ""☺️"", ""😆"" ]
+                ""optionVisuals"": [ ""??"", ""??"", ""??"" ]
               },
               {
                 ""id"": 6,
@@ -200,10 +229,8 @@ namespace App2
           }
         ]";
 
-            return jsonString;//""😭"",""☺️"",""😆""
+            return jsonString;
         }
-
-
 
     }
 }

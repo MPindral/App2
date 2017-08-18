@@ -36,15 +36,6 @@ namespace App2
 		{
 			InitializeComponent ();
 
-            Label header = new Label
-            {
-                Text = "Choose Quiz",
-                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)), //I utilised this URL for this line https://forums.xamarin.com/discussion/30207/whats-the-deal-with-xamarin-forms-label-font-is-obsolete
-                HorizontalTextAlignment = TextAlignment.Center,
-                BackgroundColor = Xamarin.Forms.Color.DarkBlue,
-                TextColor = Xamarin.Forms.Color.White
-            };
-
             tblQuizes = new TableView
             {
                 Intent = TableIntent.Data,
@@ -60,7 +51,6 @@ namespace App2
             this.Content = new StackLayout
             {
                 Children = {
-                    header,
                     tblQuizes
                 }
             };

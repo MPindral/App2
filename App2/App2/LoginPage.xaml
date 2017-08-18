@@ -2,13 +2,12 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="App2.LoginPage"
+             Title="Login / Change User"
              Padding="20, 20, 20, 60">
     
     <ContentPage.Content>
 
         <StackLayout Orientation = "Vertical" HorizontalOptions="Center" VerticalOptions="Center">
-
-            <Label Text="Login Page" Font="bold, Large" BackgroundColor="DarkBlue" TextColor="White" HorizontalTextAlignment="Center"/>
 
             <Label Text="Username"/>
             <Entry x:Name="txtUserName" 
