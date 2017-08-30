@@ -14,13 +14,6 @@
                    Placeholder="Please enter your name" 
                    BackgroundColor="Gray"/>
             
-            <Label Text="Password"/>
-            <Entry x:Name="txtPassword"
-                   Placeholder="Please enter your password"
-                   BackgroundColor="Gray"
-                   IsPassword="True"
-                   TextChanged="txtPasswordChanged"/>
-
             <Button Text="Login"/>
 
         </StackLayout>

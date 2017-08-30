@@ -12,16 +12,40 @@ namespace App2
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class LoginPage : ContentPage
 	{
-		public LoginPage ()
-		{
-			InitializeComponent ();
-		}
 
+        public static string currentUsername;
 
-        void txtPasswordChanged (object sender, TextChangedEventArgs e)
+        public LoginPage()
         {
-            Entry txtPassword = sender as Entry;
-            string password = txtPassword.Text;
-        } 
-	}//
+            InitializeComponent();
+
+            Label usernameLabel = new Label
+            {
+                Text = "Username"
+            };
+
+            Entry usernameEntry = new Entry
+            {
+                Placeholder = "Please enter your name"
+            };
+
+            Button btnLogin = new Button
+            {
+                Text = "Login",
+                HorizontalOptions = LayoutOptions.Center
+            };
+
+            btnLogin.Clicked += (sender, e) =>
+            {
+                currentUsername = usernameEntry.Text;
+            };
+
+
+
+
+
+
+
+        }
+	}
 }

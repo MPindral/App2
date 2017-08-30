@@ -30,11 +30,26 @@ namespace App2
         List<string> OptionItems;
         List<string> OptionItemsImage;
 
+
+
         List<MultipleChoiceAnswer> multipleChoiceAnswers;
 
         public RecordQuizAnswers ()
 		{
 			InitializeComponent ();
+
+
+            //Get the saved quiz data
+            
+            if (Application.Current.Properties.ContainsKey(LoginPage.currentUsername+","+ChooseQuiz.quizIdClicked))
+            {
+                List<string> answersList = Application.Current.Properties[LoginPage.currentUsername + "," + ChooseQuiz.quizIdClicked] as List<string>;
+                Console.WriteLine("this is my saved id: " + answersList);
+            }
+
+
+
+
 
             tblQuizes = new TableView
             {
@@ -46,12 +61,19 @@ namespace App2
                 HasUnevenRows = true             
             };
 
+            Button btnSubmit = new Button
+            {
+                Text = "Submit",
+                HorizontalOptions = LayoutOptions.Center
+            };
+
             section = new TableSection();
             
             this.Content = new StackLayout
             {
                 Children = {
-                    tblQuizes
+                    tblQuizes,
+                    btnSubmit
                 }
             };
             
@@ -87,7 +109,6 @@ namespace App2
 
                         ViewCellHeader = new ViewCell()
                         {
-
                             View = new StackLayout
                             {
                                 Margin = new Thickness(0, 10, 0, 0),
@@ -126,6 +147,18 @@ namespace App2
                                     }
                                 }
                             };
+
+                            //Here trying to catch the contents. Get the ID and then populate it back using hte ID as the reference
+                            //create two dimensional arrray with an int capturing the ID and the answer. I have to do this to propwerly compare the ID
+                            //EG 1 / My answer then i compare on the array's first column.
+                            singleLineEntry.Unfocused += (sender, e) =>
+                            {
+                                Console.WriteLine(item.id+":::"+singleLineEntry.Text);
+                            };
+
+
+
+
 
                             section.Add(ViewCellHeader);
                             section.Add(ViewCellAnswer);
@@ -238,7 +271,6 @@ namespace App2
 
                         if (item.type == "scale")
                         {
-
                             Stepper stepperView = new Stepper
                             {
                                 Minimum = Convert.ToDouble(item.start),
