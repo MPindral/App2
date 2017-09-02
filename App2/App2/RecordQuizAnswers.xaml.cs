@@ -30,9 +30,10 @@ namespace App2
         List<string> OptionItems;
         List<string> OptionItemsImage;
 
-
-
         List<MultipleChoiceAnswer> multipleChoiceAnswers;
+
+        public static List<AnswerManager> Answers = new List<AnswerManager>();
+
 
         public RecordQuizAnswers ()
 		{
@@ -43,8 +44,13 @@ namespace App2
             
             if (Application.Current.Properties.ContainsKey(LoginPage.currentUsername+","+ChooseQuiz.quizIdClicked))
             {
-                List<string> answersList = Application.Current.Properties[LoginPage.currentUsername + "," + ChooseQuiz.quizIdClicked] as List<string>;
-                Console.WriteLine("this is my saved id: " + answersList);
+                Answers = Application.Current.Properties[LoginPage.currentUsername + "," + ChooseQuiz.quizIdClicked] as List<AnswerManager>;
+
+                foreach (AnswerManager a in Answers)
+                {
+                    Console.WriteLine(a.questionId+":"+a.answer);
+                }
+
             }
 
 
@@ -82,6 +88,63 @@ namespace App2
 
         }
 
+        public string ProvideAnswerText(int qId)
+        {
+            string answerText = "";
+
+            foreach (AnswerManager a in Answers)
+            {
+                if (qId == a.questionId)
+                {
+                    answerText = a.answer;
+                }
+            }
+            return answerText;
+        }
+
+        public void UpdateAnswerList(int qId, bool isMultiChc, string ans, bool isSelected)
+        {
+            bool wasfound = false;
+
+            if (!isMultiChc)
+            {
+                foreach (AnswerManager a in Answers)
+                {
+                    //if the question already exists in the list
+                    if (a.questionId == qId)
+                    {
+                        wasfound = true;
+                        a.answer = ans;
+                    }
+                }
+            }
+
+
+            if (isMultiChc)
+            {
+                foreach (AnswerManager a in Answers)
+                {
+                    if (a.questionId == qId && a.answer == ans)
+                    {
+                        wasfound = true;
+                        a.isMultipleChoiceSelected = isSelected;
+                    }
+                }
+            }
+
+            //if the question does not exist then create it and add to the list
+            if (!wasfound)
+            {
+                AnswerManager anotherAnswer = new AnswerManager();
+                anotherAnswer.questionId = qId;
+                anotherAnswer.isMultipleChoice = isMultiChc;
+                anotherAnswer.answer = ans;
+                anotherAnswer.isMultipleChoiceSelected = isSelected;
+                Answers.Add(anotherAnswer);
+            }
+
+        }
+
         private void ReadQuiz()
         {
 
@@ -92,10 +155,10 @@ namespace App2
             foreach (var question in result)
             {
 
-                Console.WriteLine(ChooseQuiz.quizIdClicked);
-
                 if (question.id == ChooseQuiz.quizIdClicked)
                 {
+
+                    //This foreach populates only the quesion header
                     foreach (var item in question.questions)
                     {
 
@@ -135,6 +198,8 @@ namespace App2
                             //For single Line entries
                             Entry singleLineEntry = new Entry();
 
+                            singleLineEntry.Text = ProvideAnswerText(item.id);
+
                             ViewCell ViewCellAnswer = new ViewCell()
                             {
                                 View = new StackLayout
@@ -153,7 +218,17 @@ namespace App2
                             //EG 1 / My answer then i compare on the array's first column.
                             singleLineEntry.Unfocused += (sender, e) =>
                             {
-                                Console.WriteLine(item.id+":::"+singleLineEntry.Text);
+                                UpdateAnswerList(item.id, false, singleLineEntry.Text, false);
+
+                                foreach(AnswerManager a in Answers)
+                                {
+                                    Console.WriteLine(
+                                        a.questionId + " : " +
+                                        a.isMultipleChoice + " : " +
+                                        a.isMultipleChoiceSelected + " : " +
+                                        a.answer
+                                        );
+                                }
                             };
 
 

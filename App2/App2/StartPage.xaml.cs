@@ -16,7 +16,7 @@ namespace App2
 		{
 			InitializeComponent ();
 
-            //Application.Current.Properties["id"] = "Over here";
+            Application.Current.Properties["id"] = "Over here";
             if (Application.Current.Properties.ContainsKey("id"))
             {
                 var id = Application.Current.Properties["id"] as string;
