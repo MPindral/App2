@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using System.Diagnostics;
 
 namespace App2
 {
@@ -38,13 +39,18 @@ namespace App2
             btnLogin.Clicked += (sender, e) =>
             {
                 currentUsername = usernameEntry.Text;
+
+                Debug.WriteLine("CurrentUserName: "+ currentUsername);
             };
 
-
-
-
-
-
+            this.Content = new StackLayout
+            {
+                Children = {
+                    usernameLabel,
+                                        usernameEntry,
+                                        btnLogin
+                }
+            };
 
         }
 	}

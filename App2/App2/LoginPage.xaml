@@ -9,13 +9,6 @@
 
         <StackLayout Orientation = "Vertical" HorizontalOptions="Center" VerticalOptions="Center">
 
-            <Label Text="Username"/>
-            <Entry x:Name="txtUserName" 
-                   Placeholder="Please enter your name" 
-                   BackgroundColor="Gray"/>
-            
-            <Button Text="Login"/>
-
         </StackLayout>
         
     </ContentPage.Content>

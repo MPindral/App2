@@ -104,7 +104,13 @@ namespace App2
 
         private async void openRecordQuizAnswers()
         {
+
+            //I have to put this text here to make sure the Answer List is ready when the RecordQuiz Answers page is open.
+            AnswerManager myAnswerManager = new AnswerManager();
+            myAnswerManager.populateAnswers();
+
             await Navigation.PushAsync(new RecordQuizAnswers());
+            
         }
 
         public string returnJsonString()

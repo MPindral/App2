@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using System.Diagnostics;
 
 namespace App2
 {
@@ -16,13 +17,18 @@ namespace App2
 		{
 			InitializeComponent ();
 
-            Application.Current.Properties["id"] = "Over here";
-            if (Application.Current.Properties.ContainsKey("id"))
-            {
-                var id = Application.Current.Properties["id"] as string;
-                Console.WriteLine("this is my saved id: "+id);
-            }
+            //Application.Current.Properties["id"] = "Over here";
+            //if (Application.Current.Properties.ContainsKey("id"))
+            //{
+            //    var id = Application.Current.Properties["id"] as string;
+            //    Debug.WriteLine("this is my saved id: "+id);
+            //}
 
+
+            foreach(KeyValuePair<string,object> kvp in Application.Current.Properties)
+            {
+                Debug.WriteLine("Open up: "+ kvp.Key + ":" + kvp.Value);
+            }
 
 
 
