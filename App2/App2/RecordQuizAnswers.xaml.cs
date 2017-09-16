@@ -28,8 +28,10 @@ namespace App2
         List<string> OptionItems;
         List<string> OptionItemsImage;
 
+        //So that I can manage the rendering of the multiple choice answers
         List<MultipleChoiceAnswer> multipleChoiceAnswers;
 
+        //For running fiunctions against the AnswerManager Class
         AnswerManager myAnswerManager = new AnswerManager();
 
         public RecordQuizAnswers ()
@@ -37,6 +39,7 @@ namespace App2
  
             InitializeComponent ();
 
+            //Set up the UI structure
             tblQuizes = new TableView
             {
                 Intent = TableIntent.Data,
@@ -89,11 +92,12 @@ namespace App2
 
             string jsonString = returnJsonString();
 
+            //COnvert the JSON String into a list of objects
             List<RootObject> result = (List<RootObject>)JsonConvert.DeserializeObject(jsonString, typeof(List<RootObject>));
 
             foreach (var question in result)
             {
-
+                //Only get the results from the corresponding quiz
                 if (question.id == ChooseQuiz.quizIdClicked)
                 {
 
@@ -132,11 +136,13 @@ namespace App2
                         };
 
 
+                        //This manages the date fields and textboxes
                         if (item.type == "date" || item.type == "Date" || item.type == "textbox")
                         {
                             //For single Line entries
                             Entry singleLineEntry = new Entry();
 
+                            //Get existing data from saved file (if it exists)
                             singleLineEntry.Text = myAnswerManager.ProvideAnswerText(item.id);
 
                             ViewCell ViewCellAnswer = new ViewCell()
@@ -152,6 +158,7 @@ namespace App2
                                 }
                             };
 
+                            //Update the Answers if the user leaves the UI element
                             singleLineEntry.Unfocused += (sender, e) =>
                             {
                                 myAnswerManager.UpdateAnswerList(item.id, false, false, singleLineEntry.Text);
@@ -163,12 +170,13 @@ namespace App2
 
                         }
 
-
+                        //this manages the textareas
                         if (item.type == "textarea")
                         {
                             //For single Line entries
                             Editor multilineEditor = new Editor { HeightRequest = 50 };
 
+                            //Get existing data from saved file (if it exists)
                             multilineEditor.Text = myAnswerManager.ProvideAnswerText(item.id);
 
                             ViewCell ViewCellAnswer = new ViewCell()
@@ -183,6 +191,7 @@ namespace App2
                                 }
                             };
 
+                            //Update the Answers if the user leaves the UI element
                             multilineEditor.Unfocused += (sender, e) =>
                             {
                                 myAnswerManager.UpdateAnswerList(item.id, false, false, multilineEditor.Text);
@@ -208,6 +217,7 @@ namespace App2
                                 pickerView.Items.Add(pickerItem);
                             }
 
+                            //Get existing data from saved file (if it exists)
                             String answerText = myAnswerManager.ProvideAnswerText(item.id);
 
                             if (answerText != "")
@@ -227,6 +237,7 @@ namespace App2
                                 }
                             };
 
+                            //Update the Answers if the user leaves the UI element
                             pickerView.Unfocused += (sender, e) =>
                             {
                                 myAnswerManager.UpdateAnswerList(item.id, false, false, pickerView.SelectedIndex.ToString());
@@ -239,6 +250,7 @@ namespace App2
                         if (item.type == "slidingoption")
                         {
 
+                            //Get existing data from saved file (if it exists)
                             String answerText = myAnswerManager.ProvideAnswerText(item.id);
                             float answerPosition = 1.0f;
 
@@ -278,6 +290,7 @@ namespace App2
                                 Text = OptionItemsImage[Convert.ToInt32(sliderView.Value)]
                             };
 
+                            //Update the Answers if the user changes theslider value
                             sliderView.ValueChanged += (sender, e) =>
                             {
                                 //https://forums.xamarin.com/discussion/22473/can-you-limit-a-slider-to-only-allow-integer-values-hopefully-snapping-to-the-next-integer
@@ -313,6 +326,7 @@ namespace App2
                         if (item.type == "scale")
                         {
 
+                            //Get existing data from saved file (if it exists)
                             String answerText = myAnswerManager.ProvideAnswerText(item.id);
                             double answerPosition = Convert.ToDouble(item.end * 0.5f);
 
@@ -379,10 +393,10 @@ namespace App2
 
                             multipleChoiceAnswers = new List<MultipleChoiceAnswer>();
 
+                            //Get existing data from saved file (if it exists) and load into a List
                             foreach (var optionItem in item.options)
                             {
                                 multipleChoiceAnswers.Add(new MultipleChoiceAnswer(optionItem, myAnswerManager.ProvideAnswerMultipleChoice(item.id, optionItem)));
-                                //false)); //here this false I need to get whether it is checked.
                             }
 
                             ListView listView = new ListView
@@ -400,8 +414,7 @@ namespace App2
                                     Xamarin.Forms.Switch swIsChecked = new Xamarin.Forms.Switch();
                                     swIsChecked.SetBinding(Xamarin.Forms.Switch.IsToggledProperty, "isChecked");
 
-                                    //This is to update the list of switches and the corresponding label.
-                                    //It is a bit of a hack but it seems to be working OK.
+                                    //Update the Answers if the user changes the UI element
                                     swIsChecked.Toggled += (sender, e) => // I got this line from https://stackoverflow.com/questions/32975894/xamarin-forms-switch-sends-toggled-event-when-value-is-updated
                                     {
                                         if (e != null)
@@ -415,12 +428,14 @@ namespace App2
                                                     if (multianswer.isChecked == true)
                                                     {
                                                         multianswer.isChecked = false;
+                                                        //Save the toggle
                                                         myAnswerManager.UpdateAnswerList(item.id, true, false, lblDescription.Text);
                                                             
                                                     }
                                                     else
                                                     {
                                                         multianswer.isChecked = true;
+                                                        //Save the toggle
                                                         myAnswerManager.UpdateAnswerList(item.id, true, true, lblDescription.Text);
                                                     }
                                                     lblIsChecked.Text = multianswer.IsCheckedString;
@@ -489,9 +504,9 @@ namespace App2
 
             }
             tblQuizes.Root.Add(section);
-            //tblQuizes.Root.Add(new TableSection[] { section });
         }
 
+        //For managing how the slider will increment across the line
         private void sliderValueChanged(object sender, ValueChangedEventArgs e)
         {
 
@@ -502,8 +517,6 @@ namespace App2
             
             sliderPositionText.Text = OptionItems[Convert.ToInt32(sliderView.Value)];
             sliderPositionImage.Text = OptionItemsImage[Convert.ToInt32(sliderView.Value)];
-
-            
 
         }
 
