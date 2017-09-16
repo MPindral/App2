@@ -34,10 +34,8 @@ namespace App2
 
         public RecordQuizAnswers ()
 		{
-
-                        
+ 
             InitializeComponent ();
-
 
             tblQuizes = new TableView
             {
@@ -52,25 +50,21 @@ namespace App2
             Button btnSaveProgress = new Button
             {
                 Text = "Save Progress",
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                BackgroundColor = Xamarin.Forms.Color.FromHex("fa00ff")
             };
 
             btnSaveProgress.Clicked += (sender, e) =>
             {
                 AnswerManager myAnswerManager = new AnswerManager();
                 myAnswerManager.WriteAnswersToDisk();
-
-                foreach (AnswerManager a in AnswerManager.Answers)
-                {
-                    Debug.WriteLine("Writing record to disk " + a.questionId + ":" + a.isMultipleChoice + ":" + a.isMultipleChoiceSelected + ":" + a.answer);
-                }
-
             };
 
             Button btnSubmit = new Button
             {
                 Text = "Submit",
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                BackgroundColor = Xamarin.Forms.Color.FromHex("fa00ff")
             };
 
             section = new TableSection();
@@ -89,19 +83,6 @@ namespace App2
 
         }
 
-        protected override bool OnBackButtonPressed()
-        {
-            // If you want to continue going back
-            base.OnBackButtonPressed();
-
-            Debug.WriteLine("Back Button pressed");
-            //Answers.Clear();
-            return false;
-
-            // If you want to stop the back button
-            //return true;
-
-        }
 
         private void ReadQuiz()
         {
@@ -227,8 +208,6 @@ namespace App2
                                 pickerView.Items.Add(pickerItem);
                             }
 
-                            Debug.WriteLine("Got to here");
-
                             String answerText = myAnswerManager.ProvideAnswerText(item.id);
 
                             if (answerText != "")
@@ -299,8 +278,6 @@ namespace App2
                                 Text = OptionItemsImage[Convert.ToInt32(sliderView.Value)]
                             };
 
-                            //sliderView.ValueChanged += sliderValueChanged;
-
                             sliderView.ValueChanged += (sender, e) =>
                             {
                                 //https://forums.xamarin.com/discussion/22473/can-you-limit-a-slider-to-only-allow-integer-values-hopefully-snapping-to-the-next-integer
@@ -335,11 +312,20 @@ namespace App2
 
                         if (item.type == "scale")
                         {
+
+                            String answerText = myAnswerManager.ProvideAnswerText(item.id);
+                            double answerPosition = Convert.ToDouble(item.end * 0.5f);
+
+                            if (answerText != "")
+                            {
+                                answerPosition = double.Parse(answerText);
+                            }
+
                             Stepper stepperView = new Stepper
                             {
                                 Minimum = Convert.ToDouble(item.start),
                                 Maximum = Convert.ToDouble(item.end),
-                                Value = Convert.ToDouble(item.end * 0.5f),
+                                Value = answerPosition,
                                 VerticalOptions = LayoutOptions.Center,
                                 Increment = Convert.ToDouble(item.increment)
 
@@ -358,8 +344,14 @@ namespace App2
                             StepperChange myStepperChange = new StepperChange();
 
                             myStepperChange.setLabel(stepperValue);
-
-                            stepperView.ValueChanged += myStepperChange.OnStepperValueChanged;
+                            
+                            //This is a hack here. I did it this way so that multiple steppers do not interfere with each other
+                            stepperView.ValueChanged += (sender, e) =>
+                            {
+                                //See how I have pased on (sender, e)
+                                myStepperChange.OnStepperValueChanged(sender, e);
+                                myAnswerManager.UpdateAnswerList(item.id, false, false, stepperView.Value.ToString());
+                            };
 
                             ViewCell ViewCellAnswer = new ViewCell()
                             {
@@ -389,7 +381,8 @@ namespace App2
 
                             foreach (var optionItem in item.options)
                             {
-                                multipleChoiceAnswers.Add(new MultipleChoiceAnswer(optionItem, false));
+                                multipleChoiceAnswers.Add(new MultipleChoiceAnswer(optionItem, myAnswerManager.ProvideAnswerMultipleChoice(item.id, optionItem)));
+                                //false)); //here this false I need to get whether it is checked.
                             }
 
                             ListView listView = new ListView
@@ -405,7 +398,7 @@ namespace App2
                                     lblIsChecked.SetBinding(Label.TextProperty, "IsCheckedString");
 
                                     Xamarin.Forms.Switch swIsChecked = new Xamarin.Forms.Switch();
-                                    swIsChecked.SetBinding(Xamarin.Forms.Switch.IsToggledProperty, "IsChecked");
+                                    swIsChecked.SetBinding(Xamarin.Forms.Switch.IsToggledProperty, "isChecked");
 
                                     //This is to update the list of switches and the corresponding label.
                                     //It is a bit of a hack but it seems to be working OK.
@@ -422,10 +415,13 @@ namespace App2
                                                     if (multianswer.isChecked == true)
                                                     {
                                                         multianswer.isChecked = false;
+                                                        myAnswerManager.UpdateAnswerList(item.id, true, false, lblDescription.Text);
+                                                            
                                                     }
                                                     else
                                                     {
                                                         multianswer.isChecked = true;
+                                                        myAnswerManager.UpdateAnswerList(item.id, true, true, lblDescription.Text);
                                                     }
                                                     lblIsChecked.Text = multianswer.IsCheckedString;
                                                 }

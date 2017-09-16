@@ -9,9 +9,8 @@
 
         <StackLayout Orientation = "Vertical" HorizontalOptions="Center" VerticalOptions="Start">
 
-            <Button x:Name="btnStartQuiz" Text="Start New Quiz" Clicked="btnStartQuizClicked"></Button>
-            <Button x:Name="btnLoginChange" Text="Login / Change User" Clicked="btnLoginChangeClicked"></Button>
-            <Button x:Name="btnViewHighScores" Text="View High Scores" Clicked="btnViewHighScoresClicked"></Button>
+            <Button x:Name="btnGetStarted" Text="Get Started" Clicked="btnGetStartedClicked" BackgroundColor="#fa00ff"></Button>
+            <Button x:Name="btnViewHighScores" Text="View High Scores" Clicked="btnViewHighScoresClicked" BackgroundColor="#fa00ff"></Button>
 
         </StackLayout>
         

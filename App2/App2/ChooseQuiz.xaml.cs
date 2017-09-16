@@ -105,7 +105,7 @@ namespace App2
         private async void openRecordQuizAnswers()
         {
 
-            //I have to put this text here to make sure the Answer List is ready when the RecordQuiz Answers page is open.
+            //I have to put this text here to make sure the Answer List is ready when the RecordQuiz Answers page is opened.
             AnswerManager myAnswerManager = new AnswerManager();
             myAnswerManager.populateAnswers();
 

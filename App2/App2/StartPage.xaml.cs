@@ -13,34 +13,19 @@ namespace App2
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class StartPage : ContentPage
 	{
+
+        
+
 		public StartPage()
 		{
 			InitializeComponent ();
 
-            //Application.Current.Properties["id"] = "Over here";
-            //if (Application.Current.Properties.ContainsKey("id"))
-            //{
-            //    var id = Application.Current.Properties["id"] as string;
-            //    Debug.WriteLine("this is my saved id: "+id);
-            //}
-
-
-            foreach(KeyValuePair<string,object> kvp in Application.Current.Properties)
-            {
-                Debug.WriteLine("Open up: "+ kvp.Key + ":" + kvp.Value);
-            }
-
-
-
-
+            //Image taken from https://psmag.com/.image/t_share/MTM2NjAzNjAwNTg2NTQ4ODMx/5396413821_78527b3335_bjpg.jpg
+            BackgroundImage = "School.jpg";
         }
 
-        private async void btnStartQuizClicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new ChooseQuiz());
-        }
 
-        private async void btnLoginChangeClicked(object sender, EventArgs e)
+        private async void btnGetStartedClicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new LoginPage());
         }
