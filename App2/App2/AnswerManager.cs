@@ -60,7 +60,7 @@ namespace App2
             if (Application.Current.Properties.ContainsKey(LoginPage.currentUsername + "_" + ChooseQuiz.quizIdClicked))
             {
                 string json = Application.Current.Properties[LoginPage.currentUsername + "_" + ChooseQuiz.quizIdClicked] as string;
-                Answers = JsonConvert.DeserializeObject<List<AnswerManager>>(json);
+                Answers = JsonConvert.DeserializeObject<List<AnswerManager>>(json);//
             }
 
         }
